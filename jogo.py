@@ -25,3 +25,19 @@ class Quadrado:
         x, y = evento.x, evento.y
         coords = self.canvas.coords(self.retangulo)
         return coords[0] <= x <= coords[2] and coords[1] <= y <= coords[3]
+       
+# Jogo
+class JogoDaMemoria:
+    def __init__(self, root):
+        self.root = root
+        self.canvas = tk.Canvas(root, width=TAMANHO, height=TAMANHO+50, bg="white")
+        self.canvas.pack()
+
+        # Criar quadrados
+        self.quadrados = []
+        tamanho = 100
+        for i in range(2):
+            for j in range(3):
+                cor = CORES[i*3 + j]
+                q = Quadrado(self.canvas, 50 + j*tamanho, 50 + i*tamanho, tamanho, cor)
+                self.quadrados.append(q)

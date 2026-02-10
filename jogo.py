@@ -41,3 +41,31 @@ class JogoDaMemoria:
                 cor = CORES[i*3 + j]
                 q = Quadrado(self.canvas, 50 + j*tamanho, 50 + i*tamanho, tamanho, cor)
                 self.quadrados.append(q)
+                       
+        self.sequencia = []
+        self.sequencia_jogador = []
+        self.nivel = 1
+        self.mostrar_sequencia = True
+
+        self.label = tk.Label(root, text="Nível: 1", font=("Arial", 16))
+        self.label.pack()
+
+        self.canvas.bind("<Button-1>", self.ao_clicar)
+        self.root.after(1000, self.jogar_nivel)
+
+    def jogar_nivel(self):
+        if self.mostrar_sequencia:
+            self.sequencia.append(random.randint(0, len(self.quadrados)-1))
+            self.label.config(text=f"Nível: {self.nivel}")
+            self.mostrar_sequencia = False
+            self.sequencia_jogador = []
+            self.mostrar_sequencia_cpu()
+                     
+    def mostrar_sequencia_cpu(self):
+        for idx in self.sequencia:
+            self.quadrados[idx].pressionar()
+            self.root.update()
+            self.root.after(500)
+            self.quadrados[idx].despressionar()
+            self.root.update()
+            self.root.after(300)

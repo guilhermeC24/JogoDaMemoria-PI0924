@@ -1,11 +1,9 @@
 import tkinter as tk
 import random
 
-# Configurações
 TAMANHO = 400
 CORES = ["red", "green", "blue", "yellow", "orange", "purple"]
 
-# Quadrado 
 class Quadrado:
     def __init__(self, canvas, x, y, tamanho, cor):
         self.canvas = canvas
@@ -25,15 +23,29 @@ class Quadrado:
         x, y = evento.x, evento.y
         coords = self.canvas.coords(self.retangulo)
         return coords[0] <= x <= coords[2] and coords[1] <= y <= coords[3]
-       
-# Jogo
+
 class JogoDaMemoria:
     def __init__(self, root):
         self.root = root
-        self.canvas = tk.Canvas(root, width=TAMANHO, height=TAMANHO+50, bg="white")
+
+        self.tela_inicial = tk.Frame(root, width=TAMANHO, height=TAMANHO)
+        self.tela_inicial.pack()
+
+        titulo = tk.Label(self.tela_inicial, text="Jogo da Memória", font=("Arial", 28))
+        titulo.pack(pady=40)
+
+        botao_jogar = tk.Button(self.tela_inicial, text="Jogar", font=("Arial", 18), command=self.iniciar_jogo)
+        botao_jogar.pack(pady=10)
+
+        botao_sair = tk.Button(self.tela_inicial, text="Sair", font=("Arial", 18), command=root.destroy)
+        botao_sair.pack(pady=10)
+
+    def iniciar_jogo(self):
+        self.tela_inicial.destroy()
+
+        self.canvas = tk.Canvas(self.root, width=TAMANHO, height=TAMANHO+50, bg="white")
         self.canvas.pack()
 
-        # Criar quadrados
         self.quadrados = []
         tamanho = 100
         for i in range(2):
@@ -41,13 +53,13 @@ class JogoDaMemoria:
                 cor = CORES[i*3 + j]
                 q = Quadrado(self.canvas, 50 + j*tamanho, 50 + i*tamanho, tamanho, cor)
                 self.quadrados.append(q)
-                       
+
         self.sequencia = []
         self.sequencia_jogador = []
         self.nivel = 1
         self.mostrar_sequencia = True
 
-        self.label = tk.Label(root, text="Nível: 1", font=("Arial", 16))
+        self.label = tk.Label(self.root, text="Nível: 1", font=("Arial", 16))
         self.label.pack()
 
         self.canvas.bind("<Button-1>", self.ao_clicar)
@@ -60,7 +72,7 @@ class JogoDaMemoria:
             self.mostrar_sequencia = False
             self.sequencia_jogador = []
             self.mostrar_sequencia_cpu()
-                     
+
     def mostrar_sequencia_cpu(self):
         for idx in self.sequencia:
             self.quadrados[idx].pressionar()
@@ -69,7 +81,7 @@ class JogoDaMemoria:
             self.quadrados[idx].despressionar()
             self.root.update()
             self.root.after(300)
-            
+
     def ao_clicar(self, evento):
         for q in self.quadrados:
             if q.foi_clicado(evento):
@@ -85,8 +97,7 @@ class JogoDaMemoria:
             else:
                 self.label.config(text="Perdeste!")
                 self.canvas.unbind("<Button-1>")
-                
-# Main
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Jogo da Memória - PI0924")

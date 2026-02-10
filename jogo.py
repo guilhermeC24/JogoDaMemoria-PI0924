@@ -69,3 +69,26 @@ class JogoDaMemoria:
             self.quadrados[idx].despressionar()
             self.root.update()
             self.root.after(300)
+            
+    def ao_clicar(self, evento):
+        for q in self.quadrados:
+            if q.foi_clicado(evento):
+                q.pressionar()
+                self.root.after(300, q.despressionar)
+                self.sequencia_jogador.append(self.quadrados.index(q))
+
+        if len(self.sequencia_jogador) == len(self.sequencia):
+            if self.sequencia_jogador == self.sequencia:
+                self.nivel += 1
+                self.mostrar_sequencia = True
+                self.root.after(1000, self.jogar_nivel)
+            else:
+                self.label.config(text="Perdeste!")
+                self.canvas.unbind("<Button-1>")
+                
+# Main
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Jogo da Memória - PI0924")
+    jogo = JogoDaMemoria(root)
+    root.mainloop()
